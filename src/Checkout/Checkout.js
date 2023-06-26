@@ -1,8 +1,31 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axiosApi from "../axiosConfig";
 
 const Checkout = () => {
-  
+  const { id } = useParams();
+  const [data, setData] = React.useState({});
+  const Navigate = useNavigate();
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = React.useState(false);
+
+  useEffect(() => {
+    axiosApi
+      .get(`/flight/details/${id}`)
+      .then(res => {
+        setData(res.data.data);
+        setIsSuccessModalOpen(true);
+        console.log(res.data.data);
+      })
+      .catch(err => {
+        alert("flight has been booked");
+        console.log(err);
+      });
+  }, []);
+
+  const handleClick = () => {
+    Navigate("/");
+  };
+
   return (
     <div>
       <section className="mt-[40px]">
@@ -24,7 +47,7 @@ const Checkout = () => {
                   <span className="text-blue-900 font-extrabold text-lg">
                     total Amount:
                   </span>{" "}
-                  $99.99
+                  Rs{data.price}
                 </p>
               </div>
 
@@ -33,26 +56,35 @@ const Checkout = () => {
                   <ul className="-my-4 divide-y divide-gray-100">
                     <li className="flex items-center gap-4 py-4">
                       <div>
-                        <h3 className="  mx-10 text-2xl  text-blue-900 font-extrabold ">
-                          New Delhi - Lucknow
+                        <h3 className="  mx-10 text-2xl  text-blue-900 font-extrabold mt-4 ">
+                          {data.from} - {data.to}
                         </h3>
 
                         <dl className="mt-[20px] space-y-px text-[10px] text-gray-900">
-                          <div className="my-[20px]">
-                            <dt className="inline mx-10 mt-[30px] text-[16px] font-bold">
-                              13:00
+                          <div className="mt-[8px]">
+                            <dt className="inline mx-10 mt-[30px] text-[16px] font-bold text-blue-600">
+                              {data.arrivalTime}
                             </dt>
                             <dd className="inline  mt-[30px] text-[16px] font-bold">
-                              New Delhi Indria Gandi International Airport
+                              Arrival Time
+                            </dd>
+                          </div>
+
+                          <div className="mt-[20px]">
+                            <dt className="inline mx-10 mt-[30px] text-[16px] font-bold text-blue-600">
+                              {data.departureTime}
+                            </dt>
+                            <dd className="inline  mt-[30px] text-[16px] font-bold">
+                              Departure Time
                             </dd>
                           </div>
 
                           <div className="my-[20px]">
-                            <dt className="inline mx-10 mt-[30px] text-[16px] font-bold">
-                              14:00
+                            <dt className="inline mx-10 mt-[30px] text-[16px] font-bold text-blue-600">
+                              {data.duration}
                             </dt>
                             <dd className="inline  mt-[30px] text-[16px] font-bold">
-                              Lucknow, Chaudhary Charan Singh Airport{" "}
+                              Duration Time
                             </dd>
                           </div>
                         </dl>
@@ -67,7 +99,7 @@ const Checkout = () => {
           <div className="bg-white py-12 md:py-24">
             <div className="mx-auto max-w-lg px-4 lg:px-8">
               <form className="grid grid-cols-6 gap-4">
-                <div className="col-span-3">
+                <div className="col-span-3 ">
                   <label
                     for="FirstName"
                     className="block text-xs font-medium text-gray-700"
@@ -78,7 +110,7 @@ const Checkout = () => {
                   <input
                     type="text"
                     id="FirstName"
-                    className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                    className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm px-8 py-2"
                   />
                 </div>
 
@@ -93,7 +125,7 @@ const Checkout = () => {
                   <input
                     type="text"
                     id="LastName"
-                    className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                    className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm px-8 py-2"
                   />
                 </div>
 
@@ -108,7 +140,7 @@ const Checkout = () => {
                   <input
                     type="email"
                     id="Email"
-                    className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                    className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm px-8 py-2"
                   />
                 </div>
 
@@ -123,7 +155,7 @@ const Checkout = () => {
                   <input
                     type="tel"
                     id="Phone"
-                    className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                    className="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm px-8 py-2"
                   />
                 </div>
 
@@ -143,7 +175,7 @@ const Checkout = () => {
                         type="text"
                         id="CardNumber"
                         placeholder="Card Number"
-                        className="relative mt-1 w-full rounded-t-md border-gray-200 focus:z-10 sm:text-sm"
+                        className="relative mt-1 w-full rounded-t-md border-gray-200 focus:z-10 sm:text-sm px-8 py-2"
                       />
                     </div>
 
@@ -158,7 +190,7 @@ const Checkout = () => {
                           type="text"
                           id="CardExpiry"
                           placeholder="Expiry Date"
-                          className="relative w-full rounded-es-md border-gray-200 focus:z-10 sm:text-sm"
+                          className="relative w-full rounded-es-md border-gray-200 focus:z-10 sm:text-sm px-8 py-2"
                         />
                       </div>
 
@@ -172,7 +204,7 @@ const Checkout = () => {
                           type="text"
                           id="CardCVC"
                           placeholder="CVC"
-                          className="relative w-full rounded-ee-md border-gray-200 focus:z-10 sm:text-sm"
+                          className="relative w-full rounded-ee-md border-gray-200 focus:z-10 sm:text-sm px-8 py-2"
                         />
                       </div>
                     </div>
@@ -192,7 +224,7 @@ const Checkout = () => {
 
                       <select
                         id="Country"
-                        className="relative w-full rounded-t-md border-gray-200 focus:z-10 sm:text-sm"
+                        className="relative w-full rounded-t-md border-gray-200 focus:z-10 sm:text-sm px-8 py-2"
                       >
                         <option>England</option>
                         <option>Wales</option>
@@ -213,7 +245,7 @@ const Checkout = () => {
                         type="text"
                         id="PostalCode"
                         placeholder="ZIP/Post Code"
-                        className="relative w-full rounded-b-md border-gray-200 focus:z-10 sm:text-sm"
+                        className="relative w-full rounded-b-md border-gray-200 focus:z-10 sm:text-sm px-8 py-2"
                       />
                     </div>
                   </div>
@@ -221,8 +253,8 @@ const Checkout = () => {
 
                 <div className="col-span-6">
                   <button
+                    onClick={handleClick}
                     className="block w-full rounded-md bg-black p-2.5 text-sm text-white transition hover:shadow-lg"
-                    
                   >
                     pay now
                   </button>
@@ -232,6 +264,24 @@ const Checkout = () => {
           </div>
         </div>
       </section>
+      {isSuccessModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white px-6 py-8 rounded shadow-md text-black max-w-sm">
+            <h2 className="text-xl font-semibold mb-4">
+              Account Created Successfully
+            </h2>
+            <p>Your account has been created successfully!</p>
+            <button
+              className="mt-6 bg-green-900 text-white rounded py-2 px-4 hover:bg-green-700 focus:outline-none"
+              onClick={() => {
+                setIsSuccessModalOpen(false);
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

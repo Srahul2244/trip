@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [data, setData] = useState({
     email: "",
     password: "",
   });
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const Navigate = useNavigate();
   const handleChange = e => {
     setData(prevData => ({
       ...prevData,
@@ -13,14 +16,16 @@ const Login = () => {
     }));
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async e => {
     // console.log(data);
+    e.preventDefault();
     try {
       const res = await axios.post(
         "https://tame-tan-cockroach-boot.cyclic.app/user/login",
         data
       );
       console.log(res.data);
+      setIsSuccessModalOpen(true);
     } catch (error) {
       console.error(error);
     }
@@ -46,7 +51,7 @@ const Login = () => {
             </div>
           </div>
           <div className="mt-10">
-            <form action="#">
+            <form action="#" onSubmit={e => handleLogin(e)}>
               <div className="flex flex-col mb-6">
                 <label
                   for="email"
@@ -131,7 +136,6 @@ const Login = () => {
                 <button
                   type="submit"
                   className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-green-900 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in"
-                  onClick={handleLogin}
                 >
                   Login
                 </button>
@@ -162,6 +166,25 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {isSuccessModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white px-6 py-8 rounded shadow-md text-black max-w-sm">
+            <h2 className="text-xl font-semibold mb-4">
+              You have logged in Successfully
+            </h2>
+            <p>user logged successfully!</p>
+            <button
+              className="mt-6 bg-green-900 text-white rounded py-2 px-4 hover:bg-green-700 focus:outline-none"
+              onClick={() => {
+                setIsSuccessModalOpen(false);
+                Navigate("/");
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

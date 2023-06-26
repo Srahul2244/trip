@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [data, setData] = useState({
@@ -8,6 +9,7 @@ const Signup = () => {
     password: "",
     mobile: "",
   });
+  const Navigate = useNavigate();
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,7 +21,7 @@ const Signup = () => {
   };
 
   const handleSignUp = async () => {
-    // console.log(data);
+    setIsLoading(true);
     try {
       const res = await axios.post(
         "https://tame-tan-cockroach-boot.cyclic.app/user/signup",
@@ -79,7 +81,14 @@ const Signup = () => {
               className="w-full text-center py-3 rounded bg-green-900 text-white hover:bg-blue-950 focus:outline-none my-1"
               onClick={handleSignUp}
             >
-              {isLoading ? "isLoading..." : "Create Account"}
+              {isLoading ? (
+                <svg
+                  class="animate-spin h-5 w-5 mr-3 ..."
+                  viewBox="0 0 24 24"
+                />
+              ) : (
+                "Create Account"
+              )}
             </button>
 
             <div className="text-center text-sm text-grey-dark mt-4">
@@ -121,7 +130,10 @@ const Signup = () => {
             <p>Your account has been created successfully!</p>
             <button
               className="mt-6 bg-green-900 text-white rounded py-2 px-4 hover:bg-green-700 focus:outline-none"
-              onClick={() => setIsSuccessModalOpen(false)}
+              onClick={() => {
+                setIsSuccessModalOpen(false);
+                Navigate("/login");
+              }}
             >
               Close
             </button>

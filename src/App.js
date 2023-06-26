@@ -14,13 +14,13 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <SearchData />
+    
       <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/checkout" element={<Checkout />} />
-      </Routes>
+        <Route path="/" element={<Landing />}></Route>
+        <Route path="/signup" element={<Signup />} ></Route>
+        <Route path="/login" element={<Login />} ></Route>
+        <Route path="/checkout/:id" element={<Checkout />} ></Route>
+     </Routes>
       <Footer />
     </div>
   );
