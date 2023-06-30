@@ -4,11 +4,20 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [data, setData] = useState({
-    email: "",
-    password: "",
+    email: "demo@gmail.com",
+    password: "demo123",
   });
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const Navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  
+
+
+
+  
+
+
+
   const handleChange = e => {
     setData(prevData => ({
       ...prevData,
@@ -16,19 +25,27 @@ const Login = () => {
     }));
   };
 
-  const handleLogin = async e => {
-    // console.log(data);
-    e.preventDefault();
-    try {
-      const res = await axios.post(
-        "https://tame-tan-cockroach-boot.cyclic.app/user/login",
-        data
-      );
-      console.log(res.data);
-      setIsSuccessModalOpen(true);
-    } catch (error) {
-      console.error(error);
+  const handleLogin = async() => {
+    if (data.email === "") {
+      return alert("Email is required");
     }
+    if (data.password === "") {
+      return alert("Password is required");
+    }
+      setIsLoading(true);
+      try {
+        const res = await axios.post(
+          "https://tame-tan-cockroach-boot.cyclic.app/user/login",
+          data
+        );
+        console.log(res.data);
+        setIsSuccessModalOpen(true);
+        setIsLoading(false);
+        localStorage.setItem("user",JSON.stringify(res.data.data))
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
   };
   return (
     <div>
@@ -51,7 +68,7 @@ const Login = () => {
             </div>
           </div>
           <div className="mt-10">
-            <form action="#" onSubmit={e => handleLogin(e)}>
+            <div>
               <div className="flex flex-col mb-6">
                 <label
                   for="email"
@@ -136,11 +153,11 @@ const Login = () => {
                 <button
                   type="submit"
                   className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-green-900 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in"
-                >
-                  Login
+                  onClick={handleLogin}>
+                  {isLoading ? "loading" : "Login"}
                 </button>
               </div>
-            </form>
+            </div>
           </div>
           <div className="flex justify-center items-center mt-6">
             <a

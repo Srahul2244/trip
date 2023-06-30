@@ -21,6 +21,18 @@ const Signup = () => {
   };
 
   const handleSignUp = async () => {
+    if (data.email === "") {
+      return alert("Email is required");
+    }
+    if (data.password === "") {
+      return alert("Password is required");
+    }
+    if (data.name === "") {
+      return alert("Name is required");
+    }
+    if (data.phone === "") {
+      return alert("phone is required");
+    }
     setIsLoading(true);
     try {
       const res = await axios.post(
@@ -78,17 +90,10 @@ const Signup = () => {
             />
             <button
               type="submit"
-              className="w-full text-center py-3 rounded bg-green-900 text-white hover:bg-blue-950 focus:outline-none my-1"
+              className="w-full text-center py-3 rounded bg-green-900 text-white hover:bg-indigo-500 focus:outline-none my-1  disabled"
               onClick={handleSignUp}
             >
-              {isLoading ? (
-                <svg
-                  class="animate-spin h-5 w-5 mr-3 ..."
-                  viewBox="0 0 24 24"
-                />
-              ) : (
-                "Create Account"
-              )}
+              {isLoading ? "loading" : "Create Account"}
             </button>
 
             <div className="text-center text-sm text-grey-dark mt-4">

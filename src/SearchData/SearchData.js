@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Loaders from "../Loaders/Loaders";
 
 const SearchData = ({ data }) => {
+  const[loading,setLoading] =useState(false)
+
+ 
+
+
+
   console.log(data);
   return (
     <div>
@@ -60,6 +67,7 @@ const SearchData = ({ data }) => {
       <h1 className="px-8 py-4 border-blue-600 border-2 w-[200px] ml-auto mr-20">
         Show all Flights
       </h1>
+     
     </div>
   );
 };

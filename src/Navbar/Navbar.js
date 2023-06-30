@@ -1,10 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import img from "../Images/round@2x.png";
 import "./Navbar.css";
 const Navbar = () => {
   const [visible, setVisible] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(0);
+
+  const user =JSON.parse(localStorage.getItem("user"))||{}
+  const Navigate=useNavigate()
 
   const handleClicks = index => {
     setActiveIndex(index);
@@ -13,6 +16,11 @@ const Navbar = () => {
   const handleClick = () => {
     setVisible(!visible);
   };
+
+  const handleLogout =()=>{
+    localStorage.removeItem("user")
+    Navigate("/signup")
+  }
 
   return (
     <div className="bg-[#FFFFFF] min-w-min">
@@ -23,7 +31,7 @@ const Navbar = () => {
           </Link>
         </div>
         <ul className="lg:flex justify-between gap-16 hidden items-center ">
-          <Link
+          <Link to="/booked"
             className={
               activeIndex === 0 ? (
                 "active"
@@ -34,7 +42,7 @@ const Navbar = () => {
             onClick={() => handleClicks(0)}
           >
             {" "}
-            Flights
+            Flights Booked
           </Link>
           <Link
             className={
@@ -62,6 +70,13 @@ const Navbar = () => {
             {" "}
             Package{" "}
           </li>
+          {
+            user.token?
+            <> 
+             <button className="block text-[#979595] py-2 px-4" onClick={handleLogout}>
+            Logout
+          </button></>:
+          <>
           <Link
             to="/login"
             className={
@@ -81,6 +96,9 @@ const Navbar = () => {
           >
             Sign Up
           </Link>
+          </>
+          }
+          
         </ul>
         <div className="py-9 lg:hidden" onClick={handleClick}>
           <button type="button" className="block w-8 h-1 bg-[#615f5f] mb-1" />
@@ -91,24 +109,32 @@ const Navbar = () => {
 
       {visible && (
         <div className="lg:hidden shadow-lg w-5/6 mx-auto border-2 ">
-          <Link to="" className="block text-[#9c9a9a] py-2 px-4">
+          <Link to="/" className="block text-[#9c9a9a] py-2 px-4">
             Hotels
           </Link>
-          <Link className="block text-[#989595] py-2 px-4" href="/">
-            Fligts
+          <Link to="/booked" className="block text-[#989595] py-2 px-4">
+            Fligts booked
           </Link>
-          <Link className="block text-[#9b9898] py-2 px-4" href="/">
+          <Link to="/"className="block text-[#9b9898] py-2 px-4">
             Packages
           </Link>
-          <Link className="block text-[#979595] py-2 px-4" href="/">
-            Sign In
-          </Link>
-          <Link
-            className="block  py-1 px-4 border-2 bg-[#383eb8] h-8 w-32 text-white"
-            href="/"
-          >
-            Sign Up
-          </Link>
+          {user.token ? (
+            <button className="block text-[#979595] py-2 px-4" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/login" className="block text-[#979595] py-2 px-4">
+                Sign In
+              </Link>
+              <Link
+                to="/signup"
+                className="block py-1 px-4 border-2 bg-[#383eb8] h-8 w-32 text-white"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       )}
     </div>
